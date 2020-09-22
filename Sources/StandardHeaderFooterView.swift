@@ -19,9 +19,9 @@ open class StandardHeaderFooterView: UITableViewHeaderFooterView, DataSetupable,
         /// The detail text to display.
         public var detailText: String?
         
-        /// :nodoc:
-        public var hashValue: Int {
-            return (title?.hashValue ?? 0) ^ (title?.hashValue ?? 0)
+        
+        public func hash(into hasher: inout Hasher) {
+            hasher.combine((title?.hashValue ?? 0) ^ (title?.hashValue ?? 0))
         }
         
         /// The designated initializer.
@@ -42,7 +42,7 @@ open class StandardHeaderFooterView: UITableViewHeaderFooterView, DataSetupable,
     }
     
     /// :nodoc:
-    open static func estimatedHeight(forWidth width: CGFloat, model: Model) -> CGFloat? {
+    public static func estimatedHeight(forWidth width: CGFloat, model: Model) -> CGFloat? {
         return 28
     }
     

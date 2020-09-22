@@ -42,9 +42,8 @@ public struct TableViewHeaderFooterViewModel: Identifiable {
         return estimatedHeightClosure(width)
     }
     
-    /// :nodoc:
-    public var hashValue: Int {
-        return identifier.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier.hashValue)
     }
     
     /// The simplest designated initializer.

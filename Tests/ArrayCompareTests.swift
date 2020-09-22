@@ -17,7 +17,9 @@ private struct TestSection: IdentifiableSection {
     var identifier: Int
     var items: [TestStruct]
     
-    var hashValue: Int { return identifier ^ items.count }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier ^ items.count)
+    }
 }
 
 class ArrayComparison_Tests: XCTestCase {

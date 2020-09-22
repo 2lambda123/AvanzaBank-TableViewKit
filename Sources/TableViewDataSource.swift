@@ -64,7 +64,7 @@ public class TableViewDataSource: NSObject {
     ///     - newSections: The new sections to set.
     ///     - animation: When set to anything other than `.none`, computes and animates the changes from the current sections. Defaults to `.automatic`
     ///     - completion: Run when the new sections have been applied.
-    public func updateSections(to newSections: [TableViewSection], animation: UITableViewRowAnimation = .automatic , completion: @escaping (() -> Void) = {} ) {
+    public func updateSections(to newSections: [TableViewSection], animation: UITableView.RowAnimation = .automatic , completion: @escaping (() -> Void) = {} ) {
 
         guard animation != .none else {
             reloadData(newSections: newSections)
@@ -107,9 +107,9 @@ public class TableViewDataSource: NSObject {
     public func setup(with tableView: UITableView) {
         self.tableView = tableView
 
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.sectionHeaderHeight = UITableViewAutomaticDimension
-        tableView.sectionFooterHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.sectionHeaderHeight = UITableView.automaticDimension
+        tableView.sectionFooterHeight = UITableView.automaticDimension
         
         ignoreDidEndDisplayingCells = true
         UIView.performWithoutAnimation {
@@ -129,7 +129,7 @@ public class TableViewDataSource: NSObject {
     /// - Returns: The index path of the row, or `nil` if none was found.
     public func indexPathForRow(identifiedBy identifier: String) -> IndexPath? {
         for (sectionIndex, section) in sections.enumerated() {
-            if let row = section.items.index(where: { $0.identifier == identifier }) {
+            if let row = section.items.firstIndex(where: { $0.identifier == identifier }) {
                 return IndexPath(row: row, section: sectionIndex)
             }
         }
@@ -205,7 +205,7 @@ extension TableViewDataSource: UITableViewDelegate {
         sections[indexPath.section].items[indexPath.row].willDisplayHandler?(tableView, cell, indexPath)
     }
 
-    public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    public func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let cell = sections[indexPath]
 
         switch editingStyle {
@@ -218,7 +218,7 @@ extension TableViewDataSource: UITableViewDelegate {
                 cellHandler?(tableView, indexPath)
             }
 
-        case .insert, .none:
+        default:
             break
         }
     }

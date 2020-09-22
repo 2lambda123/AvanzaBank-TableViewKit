@@ -17,7 +17,7 @@ public extension UITableView {
     ///   - changes: The changes to animate.
     ///   - rowAnimation: The row animation to use for animations. Defaults to `.Automatic`.
     ///   - updateHandler: An optional handler that gets called for every visible row that has an `Update` change. When omitted, `reloadRowsAtIndexPaths` is called instead. Defaults to `nil`.
-    func applyChanges<Section: IdentifiableSection, Item>(_ changes: ([ArrayChange<Section>], [SectionedArrayChange<Item>]), rowAnimation: UITableViewRowAnimation = .automatic, updateHandler: ((UITableViewCell, Item, IndexPath, IndexPath) -> Void)? = nil) where Section.Item == Item {
+    func applyChanges<Section: IdentifiableSection, Item>(_ changes: ([ArrayChange<Section>], [SectionedArrayChange<Item>]), rowAnimation: UITableView.RowAnimation = .automatic, updateHandler: ((UITableViewCell, Item, IndexPath, IndexPath) -> Void)? = nil) where Section.Item == Item {
         applyChanges(changes.0, itemChanges: changes.1, rowAnimation: rowAnimation, updateHandler: updateHandler)
     }
     
@@ -32,7 +32,7 @@ public extension UITableView {
     ///   - rowAnimation: The row animation to use for animations. Defaults to `.Automatic`.
     ///   - updateHandler: An optional handler that gets called for every visible row that has an `Update` change. When omitted, `reloadRowsAtIndexPaths` is called instead. Defaults to `nil`.
     ///   - completion: An optional handler that runs after applying the changes. Is always called with a `true` boolean parameter. Defaults to `nil`.
-    func applyChanges<Section: IdentifiableSection, Item>(_ sectionChanges: [ArrayChange<Section>], itemChanges: [SectionedArrayChange<Item>], rowAnimation: UITableViewRowAnimation = .automatic, updateHandler: ((UITableViewCell, Item, IndexPath, IndexPath) -> Void)? = nil, completion:  ((Bool) -> Void)? = nil) where Section.Item == Item {
+    func applyChanges<Section: IdentifiableSection, Item>(_ sectionChanges: [ArrayChange<Section>], itemChanges: [SectionedArrayChange<Item>], rowAnimation: UITableView.RowAnimation = .automatic, updateHandler: ((UITableViewCell, Item, IndexPath, IndexPath) -> Void)? = nil, completion:  ((Bool) -> Void)? = nil) where Section.Item == Item {
         
         guard sectionChanges.count > 0 || itemChanges.count > 0 else { completion?(true); return }
         
@@ -105,7 +105,7 @@ public extension UITableView {
     ///   - sectionIndex: The section in which the changes have been applied to the data source.
     ///   - rowAnimation: The row animation to use for animations. Defaults to `.Automatic`.
     ///   - updateHandler: An optional handler that gets called for every visible row that has an `Update` change. When omitted, `reloadRowsAtIndexPaths` is called instead. Defaults to `nil`.
-    func applyChanges<Item>(_ changes: [ArrayChange<Item>], sectionIndex: Int, rowAnimation: UITableViewRowAnimation = .automatic, updateHandler: ((UITableViewCell, Item, Int, Int) -> Void)? = nil) {
+    func applyChanges<Item>(_ changes: [ArrayChange<Item>], sectionIndex: Int, rowAnimation: UITableView.RowAnimation = .automatic, updateHandler: ((UITableViewCell, Item, Int, Int) -> Void)? = nil) {
         beginUpdates()
         for change in changes {
             switch change.type {

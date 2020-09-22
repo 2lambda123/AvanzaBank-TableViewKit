@@ -13,7 +13,7 @@ public extension UIView {
     ///
     /// - parameter  named: The name of the Nib file.
     /// - parameter bundle: The bundle of the Nib file. Defaults to `nil`.
-    public class func loadFromNib<T>(named nibName: String, bundle : Bundle? = nil) -> T? {
+    class func loadFromNib<T>(named nibName: String, bundle : Bundle? = nil) -> T? {
         return UINib(
             nibName: nibName,
             bundle: bundle

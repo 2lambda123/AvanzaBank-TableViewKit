@@ -70,7 +70,7 @@ public struct TableViewCellModel: Identifiable {
     public var pasteAction: CellHandler?
     
     /// The preferred row animation this cell should use when animating in & out of the table view.
-    public var preferredAnimation: UITableViewRowAnimation
+    public var preferredAnimation: UITableView.RowAnimation
     
     /// Takes a width, returns a height
     fileprivate let estimatedHeightClosure: (CGFloat) -> CGFloat
@@ -80,9 +80,8 @@ public struct TableViewCellModel: Identifiable {
         return estimatedHeightClosure(width)
     }
     
-    /// :nodoc:
-    public var hashValue: Int {
-        return identifier.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier.hashValue)
     }
     
     /// A plain initializer to be used with a standard `UITableViewCell`.
@@ -120,7 +119,7 @@ public struct TableViewCellModel: Identifiable {
         editActions: CellEditActions = .none,
         copyAction: CellHandler? = nil,
         pasteAction: CellHandler? = nil,
-        preferredAnimation: UITableViewRowAnimation = .automatic) {
+        preferredAnimation: UITableView.RowAnimation = .automatic) {
         
         self.identifier = identifier
         self.cellReuseIdentifier = cellReuseIdentifier
@@ -173,7 +172,7 @@ public struct TableViewCellModel: Identifiable {
         editActions: CellEditActions = .none,
         copyAction: ((UITableView, IndexPath, Cell) -> Void)? = nil,
         pasteAction: ((UITableView, IndexPath, Cell) -> Void)? = nil,
-        preferredAnimation: UITableViewRowAnimation = .automatic) where Cell: ReusableViewType {
+        preferredAnimation: UITableView.RowAnimation = .automatic) where Cell: ReusableViewType {
         
         func handlerForTypedHandler(_ typedHandler: @escaping (UITableView, IndexPath, Cell) -> Void) -> Handler {
             return { tableView, indexPath in

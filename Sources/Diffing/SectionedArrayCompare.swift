@@ -107,7 +107,7 @@ public extension Array where Element: IdentifiableSection, Element.Identifier ==
     ///
     /// - Parameter indexPath: The index path to access. This must be valid for the array of sections.
     /// - Returns: The item at the provided index path.
-    public subscript(indexPath: IndexPath) -> Element.Item {
+    subscript(indexPath: IndexPath) -> Element.Item {
         return self[indexPath.section].items[indexPath.item]
     }
     
@@ -119,7 +119,7 @@ public extension Array where Element: IdentifiableSection, Element.Identifier ==
     
     fileprivate func indexPath(for item: Element.Item) -> IndexPath? {
         for (sectionIndex, section) in enumerated() {
-            if let itemIndex = section.items.index(of: item) {
+            if let itemIndex = section.items.firstIndex(of: item) {
                 return IndexPath(item: itemIndex, section: sectionIndex)
             }
         }
@@ -128,7 +128,7 @@ public extension Array where Element: IdentifiableSection, Element.Identifier ==
     
     fileprivate func indexPath(for identifier: Element.Item.Identifier) -> IndexPath? {
         for (sectionIndex, section) in enumerated() {
-            if let itemIndex = section.items.map({ $0.identifier }).index(of: identifier) {
+            if let itemIndex = section.items.map({ $0.identifier }).firstIndex(of: identifier) {
                 return IndexPath(item: itemIndex, section: sectionIndex)
             }
         }

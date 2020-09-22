@@ -57,9 +57,8 @@ public struct TableViewSection: IdentifiableSection {
 }
 
 extension TableViewSection: Hashable {
-    /// :nodoc:
-    public var hashValue: Int {
-        return identifier.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier.hashValue)
     }
 }
 

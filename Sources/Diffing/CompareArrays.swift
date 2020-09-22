@@ -80,7 +80,7 @@ public extension Array where Element: Identifiable {
             changes.append(ArrayChange(item: newArray[realSecondIndex], type: .move(realFirstIndex, realSecondIndex)))
             
             // Make move in iterating array
-            movedIdentifiers.remove(at: movedIdentifiers.index(of: identifier)!)
+            movedIdentifiers.remove(at: movedIdentifiers.firstIndex(of: identifier)!)
             movedIdentifiers.insert(identifier, at: i)
         }
         

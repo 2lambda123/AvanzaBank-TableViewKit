@@ -12,8 +12,8 @@ private struct TestSection: IdentifiableSection {
     let identifier: String
     var items: [TestStruct]
     
-    var hashValue: Int {
-        return identifier.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(identifier.hashValue)
     }
 }
 

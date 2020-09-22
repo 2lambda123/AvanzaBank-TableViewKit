@@ -12,7 +12,7 @@ public protocol NibLoadable { }
 
 public extension NibLoadable where Self:UIView {
     
-    public static func loadFromNib() -> Self {
+    static func loadFromNib() -> Self {
         return loadFromNib(named: String(describing: self), bundle: Bundle(for: self))!
     }
     
