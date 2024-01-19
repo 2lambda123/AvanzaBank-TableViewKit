@@ -52,7 +52,7 @@ public enum ReusableViewKind {
 /// A protocol for reusable views
 public protocol Reusable {
     
-    static var staticReuseIdentifier: String { get }
+    static var reuseIdentifier: String { get }
     
     static func register(viewKind: ReusableViewKind, inTableView tableView: UITableView)
 
@@ -93,7 +93,7 @@ extension ReusableViewClass {
 ///
 public protocol ReusableViewNib: class, StaticTypeNameReusable {
     
-    static var nibName: String { get }
+    static var reuseIdentifier: String { get }
     
 }
 
