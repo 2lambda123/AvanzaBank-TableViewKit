@@ -16,7 +16,7 @@ public class TableViewDataSource: NSObject {
     /// The current table view sections
     public fileprivate(set) var sections: [TableViewSection]
     fileprivate weak var tableView: UITableView?
-    fileprivate let processingQueue = OperationQueue()
+    fileprivate let processingQueue = OperationQueue.main
     public weak var scrollViewDelegate: UIScrollViewDelegate?
 
     /// The designated initializer
