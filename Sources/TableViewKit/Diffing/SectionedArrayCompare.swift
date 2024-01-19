@@ -128,7 +128,7 @@ public extension Array where Element: IdentifiableSection, Element.Identifier ==
     
     fileprivate func indexPath(for identifier: Element.Item.Identifier) -> IndexPath? {
         for (sectionIndex, section) in enumerated() {
-            if let itemIndex = section.items.map({ $0.identifier }).firstIndex(of: identifier) {
+            if let itemIndex = section.items.map({ $0.identifiableSectionIdentifier }).firstIndex(where: { $0 == identifier }) {
                 return IndexPath(item: itemIndex, section: sectionIndex)
             }
         }

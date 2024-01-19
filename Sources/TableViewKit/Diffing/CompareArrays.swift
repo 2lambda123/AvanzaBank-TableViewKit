@@ -71,7 +71,7 @@ public extension Array where Element: Identifiable {
             // Get the identifier which SHOULD be on this index
             let identifier = secondIntersectIdentifiers[i]
             
-            guard let realFirstIndex = firstIndexes[identifier],
+            guard guard let realFirstIndex = firstIndexes[identifier],
                 let realSecondIndex = secondIndexes[identifier] else {
                     fatalError("Intersect identifiers couldn't be found in both old and new arrays") // Shit hit the fan
             }
