@@ -8,12 +8,14 @@
 import UIKit
 
 /// For classes where there is a Nib with the same filename as the class.
-public protocol NibLoadable { }
+protocol NibLoadable: class { }
 
-public extension NibLoadable where Self:UIView {
+extension NibLoadable where Self: UIView {
     
-    static func loadFromNib() -> Self {
-        return loadFromNib(named: String(describing: self), bundle: Bundle(for: self))!
+    static func loadFromNib(named nibName: String? = nil, bundle: Bundle? = nil) -> Self {
+        let nibName = nibName ?? String(describing: self)
+        let bundle = bundle ?? Bundle(for: self)
+        return bundle.loadNibNamed(nibName, owner: self, options: nil)!.first as! Self
     }
     
 }
