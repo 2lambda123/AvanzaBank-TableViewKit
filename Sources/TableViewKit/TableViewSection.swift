@@ -11,19 +11,19 @@ import Foundation
 ///
 /// - SeeAlso: `TableViewCellModel`
 public struct TableViewSection: IdentifiableSection {
-    
+
     /// A string that uniquely identifies this section within the table view.
     public var identifier: String
-    
+
     /// The header view model for this section.
     public var header: TableViewHeaderFooterViewModel?
-    
+
     /// The footer view model for this section.
     public var footer: TableViewHeaderFooterViewModel?
-    
+
     /// The cell models for this section.
     public var items: [TableViewCellModel]
-    
+
     /// The designated initializer.
     ///
     /// - Parameters:
@@ -37,7 +37,7 @@ public struct TableViewSection: IdentifiableSection {
         self.footer = footer
         self.items = cells
     }
-    
+
     /// A convenience initializer to use with `DualTitledSectionHeaderView`s as headers and footers.
     ///
     /// - Parameters:

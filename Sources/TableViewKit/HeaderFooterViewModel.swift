@@ -9,31 +9,31 @@ import UIKit
 
 /// A view model for a table view header footer view
 public struct TableViewHeaderFooterViewModel: Identifiable {
-    
+
     /// A function to configure a `UITableViewHeaderFooterView`.
     public typealias Configurator = (UITableViewHeaderFooterView) -> UITableViewHeaderFooterView
-    
+
     /// The default height for header footer views.
     public static let StandardHeight: CGFloat = 28.0
-    
+
     /// :nodoc:
     public let identifier: String
-    
+
     /// The reuse identifier for this view
     public let viewReuseIdentifier: String
-    
+
     /// A function that registers this view for reuse.
     public var viewReuseRegistrator: ((UITableView) -> Void)?
-    
+
     /// This view's data
     public let data: AnyEquatable?
-    
+
     /// A configu
     public let configurator: Configurator?
-    
+
     /// Takes a width, returns a height
     fileprivate let estimatedHeightClosure: (CGFloat) -> CGFloat
-    
+
     /// Calculates an estimated height of the header footer view for a provided width.
     ///
     /// - Parameter width: The width of the table view.
@@ -41,11 +41,11 @@ public struct TableViewHeaderFooterViewModel: Identifiable {
     public func estimatedHeight(forWidth width: CGFloat) -> CGFloat {
         return estimatedHeightClosure(width)
     }
-    
+
     public func hash(into hasher: inout Hasher) {
         hasher.combine(identifier.hashValue)
     }
-    
+
     /// The simplest designated initializer.
     ///
     /// - Parameters:
@@ -63,7 +63,7 @@ public struct TableViewHeaderFooterViewModel: Identifiable {
         self.estimatedHeightClosure = { _ in return estimatedHeight }
         self.configurator = configurator
     }
-    
+
     /// Convenience initializer for a header footer view of `ReusableViewType`
     ///
     /// - Parameters:
@@ -78,13 +78,13 @@ public struct TableViewHeaderFooterViewModel: Identifiable {
         self.data = model
         self.viewReuseIdentifier = View.staticReuseIdentifier
         self.viewReuseRegistrator = { View.register(viewKind: .headerFooterView, inTableView: $0) }
-        
+
         self.configurator = { view in
             guard let view = view as? View else { fatalError("Wrong view type for model") }
             view.setup(model)
             return additionalConfiguration?(view) ?? view
         }
-        
+
         self.estimatedHeightClosure = { width in
             if let estimatedHeight = viewType.estimatedHeight(forWidth: width, model: model) {
                 return estimatedHeight
@@ -95,7 +95,7 @@ public struct TableViewHeaderFooterViewModel: Identifiable {
             }
         }
     }
-    
+
     /// Convenience initializer for using a `DualTitledSectionHeaderView`.
     ///
     /// - Parameters:
@@ -107,7 +107,7 @@ public struct TableViewHeaderFooterViewModel: Identifiable {
     public init(title: String? = nil) {
         self.init(viewType: StandardHeaderFooterView.self, identifier: title ?? UUID().uuidString, model: .init(title: title))
     }
-    
+
 }
 
 /// :nodoc:

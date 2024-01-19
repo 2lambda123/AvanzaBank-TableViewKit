@@ -8,21 +8,21 @@
 import UIKit
 
 public extension TableViewCellModel {
-    
+
     /// A style for cell separators.
     enum SeparatorStyle {
-        
+
         /// An edge-to-edge separator.
         case fullWidth
-        
+
         /// The standard style with separator going from start of content.
         case `default`
-        
+
         /// No separator.
         case none
 
     }
-    
+
     /// Sets a separator style to a cell by wrapping the original `cellConfigurator`.
     ///
     /// - Parameter style: The style to set
@@ -33,11 +33,11 @@ public extension TableViewCellModel {
             cell.setSeparatorStyle(style)
         }
     }
-    
+
 }
 
 public extension UITableViewCell {
-    
+
     /// Sets a separator style to a cell. Note that setting the `.default` style on an already visible cell which tweaks its separator insets might be flaky.
     ///
     /// - Parameter style: The style to set
@@ -51,5 +51,5 @@ public extension UITableViewCell {
                 separatorInset = UIEdgeInsets(top: 0, left: layoutMargins.left, bottom: 0, right: 0)
         }
     }
-    
+
 }

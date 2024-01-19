@@ -11,23 +11,23 @@ import Foundation
 ///
 /// - SeeAlso: `SectionedArrayChange`
 public enum SectionedChangeType: Hashable {
-    
+
     /// An insertion.
     case insert(IndexPath)
-    
+
     /// A deletion.
     case delete(IndexPath)
-    
+
     /// A move from an index path to another.
     case move(IndexPath, IndexPath)
-    
+
     /// An update of an object with index paths before and after.
     case update(IndexPath, IndexPath)
 
 }
 
 extension SectionedChangeType: CustomDebugStringConvertible {
-    
+
     /// :nodoc:
     public var debugDescription: String {
         switch self {
@@ -48,13 +48,13 @@ extension SectionedChangeType: CustomDebugStringConvertible {
 ///
 /// - SeeAlso: `IdentifiableSection`
 public struct SectionedArrayChange<Item: Identifiable>: Hashable {
-    
+
     /// The item affected by the change
     public var item: Item
-    
+
     /// The type of the change
     public var type: SectionedChangeType
-    
+
     /// The designated initializer.
     ///
     /// - Parameters:

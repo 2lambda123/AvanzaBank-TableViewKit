@@ -9,21 +9,21 @@ import UIKit
 
 /// Wraps a standard `UITableViewHeaderFooterView` by adding reusability protocols & a view model.
 open class StandardHeaderFooterView: UITableViewHeaderFooterView, DataSetupable, ReusableViewClass {
-    
+
     /// The model for a `StandardHeaderFooterView`.
     public struct Model: Hashable, AnyEquatable {
-        
+
         /// The title to display.
         public var title: String?
-        
+
         /// The detail text to display.
         public var detailText: String?
-        
-        
+
+
         public func hash(into hasher: inout Hasher) {
             hasher.combine((title?.hashValue ?? 0) ^ (title?.hashValue ?? 0))
         }
-        
+
         /// The designated initializer.
         ///
         /// - Parameters:
@@ -34,16 +34,16 @@ open class StandardHeaderFooterView: UITableViewHeaderFooterView, DataSetupable,
             self.detailText = detailText
         }
     }
-    
+
     /// :nodoc:
     open func setup(_ model: Model) {
         textLabel?.text = model.title
         detailTextLabel?.text = model.detailText
     }
-    
+
     /// :nodoc:
     public static func estimatedHeight(forWidth width: CGFloat, model: Model) -> CGFloat? {
         return 28
     }
-    
+
 }

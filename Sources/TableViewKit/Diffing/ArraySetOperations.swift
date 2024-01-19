@@ -8,7 +8,7 @@
 import Foundation
 
 internal extension Array where Element: Equatable {
-    
+
     /// Returns an array with provided values filtered out
     ///
     /// Example: `[1,2].subtract([1,3]) == [2]`
@@ -18,7 +18,7 @@ internal extension Array where Element: Equatable {
     func subtract(_ values: [Element]) -> [Element] {
         return self.filter { !values.contains($0) }
     }
-    
+
 }
 
 /// Returns the resulting array of subtracting the elements in the right hand side from the left hand side.

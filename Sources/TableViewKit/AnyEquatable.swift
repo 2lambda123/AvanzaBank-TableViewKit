@@ -11,17 +11,17 @@ import UIKit
 /// Hashable types just need to add the protocol to their interface without writing any implementation.
 /// Example: `extension String: AnyEquatable {}`
 public protocol AnyEquatable {
-    
+
     /// :nodoc:
     func isEqual(to thing: Any?) -> Bool
-    
+
     /// :nodoc:
     var hashValue: Int { get }
 
 }
 
 extension Equatable {
-    
+
     /// :nodoc:
     public func isEqual(to thing: Any?) -> Bool {
         if let thing = thing as? Self {
@@ -29,7 +29,7 @@ extension Equatable {
         }
         return false
     }
-    
+
 }
 
 /// :nodoc:

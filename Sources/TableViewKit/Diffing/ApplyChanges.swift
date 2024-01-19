@@ -8,7 +8,7 @@
 import UIKit
 
 public extension UITableView {
-    
+
     /// Animates row & section changes on the table view.
     ///
     /// - Note: Make sure that the changes have been applied to the data source before calling this method.
@@ -20,8 +20,8 @@ public extension UITableView {
     func applyChanges<Section: IdentifiableSection, Item>(_ changes: ([ArrayChange<Section>], [SectionedArrayChange<Item>]), rowAnimation: UITableView.RowAnimation = .automatic, updateHandler: ((UITableViewCell, Item, IndexPath, IndexPath) -> Void)? = nil) where Section.Item == Item {
         applyChanges(changes.0, itemChanges: changes.1, rowAnimation: rowAnimation, updateHandler: updateHandler)
     }
-    
-    
+
+
     /// Animates row & section changes on the table view.
     ///
     /// - Note: Make sure that the model changes have been applied to the data source before calling this method.
@@ -33,14 +33,14 @@ public extension UITableView {
     ///   - updateHandler: An optional handler that gets called for every visible row that has an `Update` change. When omitted, `reloadRowsAtIndexPaths` is called instead. Defaults to `nil`.
     ///   - completion: An optional handler that runs after applying the changes. Is always called with a `true` boolean parameter. Defaults to `nil`.
     func applyChanges<Section: IdentifiableSection, Item>(_ sectionChanges: [ArrayChange<Section>], itemChanges: [SectionedArrayChange<Item>], rowAnimation: UITableView.RowAnimation = .automatic, updateHandler: ((UITableViewCell, Item, IndexPath, IndexPath) -> Void)? = nil, completion:  ((Bool) -> Void)? = nil) where Section.Item == Item {
-        
+
         guard sectionChanges.count > 0 || itemChanges.count > 0 else { completion?(true); return }
-        
+
         beginUpdates()
-        
+
         var sectionsInserted: [Int] = []
         var sectionsDeleted: [Int] = []
-        
+
         for change in sectionChanges {
             switch change.type {
                 case .insert(let newIndex):
@@ -59,14 +59,14 @@ public extension UITableView {
                     reloadSections(IndexSet(integer: oldIndex), with: .fade)
                 }
         }
-        
+
         for change in itemChanges {
-            
+
             var rowAnimation = rowAnimation
             if let cellModel = change.item as? TableViewCellModel {
                 rowAnimation = cellModel.preferredAnimation
             }
-            
+
             switch change.type {
                 case .insert(let newIndexPath):
                     insertRows(at: [newIndexPath], with: rowAnimation)
@@ -90,12 +90,12 @@ public extension UITableView {
                     }
             }
         }
-        
+
         endUpdates()
-        
+
         completion?(true)
     }
-    
+
     /// Animates row changes in a specific section.
     ///
     /// - Note: Make sure that the changes have been applied to the data source before calling this method.
@@ -118,7 +118,7 @@ public extension UITableView {
                     moveRow(at: IndexPath(row: beforeIndex, section: sectionIndex), to: IndexPath(row: afterIndex, section: sectionIndex))
                 case .update(let beforeIndex, let afterIndex):
                     let beforeIndexPath = IndexPath(row: beforeIndex, section: sectionIndex)
-                    
+
                     if let rows = self.indexPathsForVisibleRows, rows.contains(beforeIndexPath) {
                         if let updateHandler = updateHandler, let cell = cellForRow(at: beforeIndexPath) {
                             updateHandler(cell, change.item, beforeIndex, afterIndex)
@@ -136,7 +136,7 @@ public extension UITableView {
 // MARK: Bonus: Change animation for collection views.
 
 public extension UICollectionView {
-    
+
     /// Animates item & section changes in the collection view.
     ///
     /// - Note: Make sure that the changes have been applied to the data source before calling this method.
@@ -148,7 +148,7 @@ public extension UICollectionView {
     func applyChanges<Section: IdentifiableSection, Item>(_ changes: ([ArrayChange<Section>], [SectionedArrayChange<Item>]), updateHandler: ((Item, IndexPath, IndexPath) -> Void)? = nil, completion:  ((Bool) -> Void)? = nil) where Section.Item == Item {
         applyChanges(changes.0, itemChanges: changes.1, updateHandler: updateHandler, completion: completion)
     }
-    
+
     /// Animates item & section changes in the collection view.
     ///
     /// - Note: Make sure that the changes have been applied to the data source before calling this method.
@@ -159,9 +159,9 @@ public extension UICollectionView {
     ///   - updateHandler: An optional handler that gets called for every visible item that has an `Update` change. When omitted, `reloadItemsAtIndexPaths` is called instead. Defaults to `nil`.
     ///   - completion: An optional handler that is called after applying the changes. The boolean parameter signifies if the animations were completed. Defaults to `nil`.
     func applyChanges<Section: IdentifiableSection, Item>(_ sectionChanges: [ArrayChange<Section>], itemChanges: [SectionedArrayChange<Item>], updateHandler: ((Item, IndexPath, IndexPath) -> Void)? = nil, completion:  ((Bool) -> Void)? = nil) where Section.Item == Item {
-        
+
         performBatchUpdates({
-            
+
             for change in sectionChanges {
                 switch change.type {
                     case .insert(let index):
@@ -174,7 +174,7 @@ public extension UICollectionView {
                         self.reloadSections(IndexSet(integer: oldIndex))
                 }
             }
-            
+
             for change in itemChanges {
                 switch change.type {
                     case .insert(let indexPath):
@@ -196,10 +196,10 @@ public extension UICollectionView {
                         }
                 }
             }
-            
+
         }, completion: completion)
     }
-    
+
     /// Animates item changes in a specific section.
     ///
     /// - Note: Make sure that the changes have been applied to the data source before calling this method.
@@ -210,9 +210,9 @@ public extension UICollectionView {
     ///   - updateHandler: An optional handler that gets called for every visible item that has an `Update` change. When omitted, `reloadItemsAtIndexPaths` is called instead. Defaults to `nil`.
     ///   - completion: An optional handler that is called after applying the changes. The boolean parameter signifies if the animations were completed. Defaults to `nil`.
     func applyChanges<Item>(_ changes: [ArrayChange<Item>], sectionIndex: Int, updateHandler: ((Item, Int, Int) -> Void)? = nil, completion: ((Bool) -> Void)? = nil) {
-        
+
         performBatchUpdates({ [unowned self] in
-            
+
             for change in changes {
                 switch change.type {
                     case .insert(let index):

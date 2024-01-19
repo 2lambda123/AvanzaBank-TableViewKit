@@ -28,7 +28,7 @@ public class TableViewDataSource: NSObject {
         super.init()
         NotificationCenter.default.addObserver(self, selector: #selector(recievedCellNeedsSizeUpdateNotification), name: TVKCellNeedsSizeUpdateNotificationName, object: nil)
     }
-    
+
     /// Sets new sections on the data source and reloads the table view if this is its data source.
     ///
     /// - Parameter newSections: The new sections to set.
@@ -46,18 +46,18 @@ public class TableViewDataSource: NSObject {
     public func updateSectionsSync(to newSections: [TableViewSection]) {
         let changes = sections.changes(toSections: newSections)
         sections = newSections
-        
+
         guard let tableView = tableView, isCurrentDataSource else { return }
-        
+
         ignoreDidEndDisplayingCells = true
         tableView.applyChanges(changes, rowAnimation: .none, updateHandler: { (cell, cellModel, _, _) in
             cellModel.cellConfigurator?(tableView, cell)
         })
         ignoreDidEndDisplayingCells = false
-        
+
         return
     }
-    
+
     /// Sets new sections on the table view, optionally animating the changes.
     ///
     /// - Parameters:
@@ -81,7 +81,7 @@ public class TableViewDataSource: NSObject {
             let changes = strongSelf.sections.changes(toSections: newSections)
 
             guard !processingOperation.isCancelled else { return }
-            
+
             DispatchQueue.main.sync { // Dispatch sync to make sure our changes are applied before any more are incoming
                 strongSelf.sections = newSections
 
@@ -110,7 +110,7 @@ public class TableViewDataSource: NSObject {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.sectionHeaderHeight = UITableView.automaticDimension
         tableView.sectionFooterHeight = UITableView.automaticDimension
-        
+
         ignoreDidEndDisplayingCells = true
         UIView.performWithoutAnimation {
             if tableView.numberOfSections > 0 {
@@ -122,7 +122,7 @@ public class TableViewDataSource: NSObject {
         tableView.reloadData()
         ignoreDidEndDisplayingCells = false
     }
-    
+
     /// Finds the index path of the row with a certain identifier.
     ///
     /// - Parameter identifier: The identifier to find.
@@ -133,7 +133,7 @@ public class TableViewDataSource: NSObject {
                 return IndexPath(row: row, section: sectionIndex)
             }
         }
-        
+
         return nil
     }
 
@@ -143,9 +143,9 @@ public class TableViewDataSource: NSObject {
         }
         return false
     }
-    
+
     fileprivate var ignoreDidEndDisplayingCells = false
-    
+
     @objc func recievedCellNeedsSizeUpdateNotification(notification: Notification) {
         guard let cell = notification.object as? UITableViewCell else { return }
         guard let tableView = tableView, tableView.visibleCells.contains(cell) else { return }
@@ -177,7 +177,7 @@ extension TableViewDataSource: UITableViewDataSource {
         cellModel.cellConfigurator?(tableView, cell)
         return cell
     }
-    
+
     /// :nodoc:
     public func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let cellModel = sections[indexPath]
@@ -222,18 +222,18 @@ extension TableViewDataSource: UITableViewDelegate {
             break
         }
     }
-    
+
     /// :nodoc:
     public func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard !ignoreDidEndDisplayingCells else { return }
         // If we're in the middle of a data source switch or section update, we'll get callbacks that those old cells did end displaying and those won't correspond to the models we have currently.
-        
+
         // Sometimes we still get callbacks for cells with index paths that no longer exists.
         guard let section = sections[safe: indexPath.section], let item = section.items[safe: indexPath.row] else { return }
-        
+
         item.didEndDisplayHandler?(tableView, cell, indexPath)
     }
-    
+
     /// :nodoc:
     public func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return sections[indexPath.section].items[indexPath.row].estimatedHeight(forWidth: tableView.bounds.width)
@@ -264,7 +264,7 @@ extension TableViewDataSource: UITableViewDelegate {
         let cellModel = sections[indexPath]
         return tableView.isMultiSelecting ? cellModel.isMultiSelectable : cellModel.isSelectable
     }
-    
+
     /// :nodoc:
     public func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         let cellModel = sections[indexPath]
@@ -274,23 +274,23 @@ extension TableViewDataSource: UITableViewDelegate {
             return cellModel.isSelectable ? indexPath : nil
         }
     }
-    
+
     /// :nodoc:
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         sections[indexPath].selectionHandler?(tableView, indexPath)
     }
-    
+
     /// :nodoc:
     public func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         guard !ignoreDidEndDisplayingCells else { return }
         // If we're in the middle of a data source switch or section update, we'll get callbacks that those old cells did end displaying and those won't correspond to the models we have currently.
-        
+
         // Sometimes we still get callbacks for cells with index paths that no longer exists.
         guard let section = sections[safe: indexPath.section], let _ = section.items[safe: indexPath.row] else { return }
-        
+
         sections[indexPath].deselectionHandler?(tableView, indexPath)
     }
-    
+
     /// :nodoc:
     public func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let cell = sections[indexPath]
@@ -306,7 +306,7 @@ extension TableViewDataSource: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
         return (sections[indexPath].copyAction != nil || sections[indexPath].pasteAction != nil)
     }
-    
+
     /// :nodoc:
     public func tableView(_ tableView: UITableView, canPerformAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
         if action == #selector(UIResponderStandardEditActions.copy(_:)) {
@@ -317,7 +317,7 @@ extension TableViewDataSource: UITableViewDelegate {
             return false
         }
     }
-    
+
     /// :nodoc:
     public func tableView(_ tableView: UITableView, performAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
@@ -389,7 +389,7 @@ extension TableViewDataSource: UITableViewDelegate {
 }
 
 internal extension Collection {
-    
+
     /// Returns the element at the specified index if it is within bounds, otherwise nil.
     subscript (safe index: Index) -> Iterator.Element? {
         return indices.contains(index) ? self[index] : nil
@@ -398,17 +398,17 @@ internal extension Collection {
 }
 
 private extension UITableView {
-    
+
     var isMultiSelecting: Bool {
         return (isEditing && allowsMultipleSelectionDuringEditing) || (!isEditing && allowsMultipleSelection)
     }
-    
+
     func headerFooterView(for viewModel: TableViewHeaderFooterViewModel) -> UIView? {
         viewModel.viewReuseRegistrator?(self)
         let view = dequeueReusableHeaderFooterView(withIdentifier: viewModel.viewReuseIdentifier)!
         return viewModel.configurator?(view) ?? view
     }
-    
+
 }
 
 /// Used for custom table view cells to report whenever they need a size update

@@ -13,7 +13,7 @@ public typealias ReusableViewType = DataSetupable & Reusable
 /// A protocol for views with a static height for use in height estimation.
 /// Note that the view still must construct its own constraints to keep its height.
 public protocol StaticHeightType {
-    
+
     /// The static height of this view.
     static var height: CGFloat { get }
 
@@ -21,28 +21,28 @@ public protocol StaticHeightType {
 
 /// A protocol for views that can be setup and sized with some kind of data model.
 public protocol DataSetupable {
-    
+
     /// The model type.
     associatedtype Model: AnyEquatable
-    
+
     /// Sets up the view with the provided data.
     ///
     /// - Parameter model: The model for the view.
     func setup(_ model: Model)
-    
+
     /// FIX-ME: This should be `estimatedSize` instead once collection view support is in for the generic data sources.
     static func estimatedHeight(forWidth width: CGFloat, model: Model) -> CGFloat?
-    
+
 }
 
 public extension DataSetupable {
-    
+
     /// :nodoc:
     static func estimatedHeight(forWidth width: CGFloat, model: Model) -> CGFloat? {
         // Default implementation for optionality
         return nil
     }
-    
+
 }
 
 public enum ReusableViewKind {
@@ -51,9 +51,9 @@ public enum ReusableViewKind {
 
 /// A protocol for reusable views
 public protocol Reusable {
-    
+
     static var staticReuseIdentifier: String { get }
-    
+
     static func register(viewKind: ReusableViewKind, inTableView tableView: UITableView)
 
 }
@@ -62,19 +62,19 @@ public protocol Reusable {
 public protocol StaticTypeNameReusable: Reusable { }
 
 extension StaticTypeNameReusable {
-    
+
     /// :nodoc:
     public static var staticReuseIdentifier: String {
         return String(describing: self)
     }
-    
+
 }
 
 /// Used for `registerClass` in table & collection views
 public protocol ReusableViewClass: class, StaticTypeNameReusable { }
 
 extension ReusableViewClass {
-    
+
     public static func register(viewKind: ReusableViewKind, inTableView tableView: UITableView) {
         switch viewKind {
             case .cell:
@@ -83,7 +83,7 @@ extension ReusableViewClass {
                 tableView.register(Self.self, forHeaderFooterViewReuseIdentifier: staticReuseIdentifier)
         }
     }
-    
+
 }
 
 
@@ -92,23 +92,23 @@ extension ReusableViewClass {
 /// Assumes there is a nib in the same bundle as the implementor, named the same name as the implementor type.
 ///
 public protocol ReusableViewNib: class, StaticTypeNameReusable {
-    
+
     static var nibName: String { get }
-    
+
 }
 
 extension ReusableViewNib {
-    
+
     /// :nodoc:
     public static var nibName: String {
         return staticReuseIdentifier
     }
-    
+
     /// :nodoc:
     public static var nib: UINib {
         return UINib(nibName: nibName, bundle: Bundle(for: self))
     }
-    
+
     public static func register(viewKind: ReusableViewKind, inTableView tableView: UITableView) {
         switch viewKind {
             case .cell:

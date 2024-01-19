@@ -11,9 +11,9 @@ import UIKit
 public protocol NibLoadable { }
 
 public extension NibLoadable where Self:UIView {
-    
+
     static func loadFromNib() -> Self {
         return loadFromNib(named: String(describing: self), bundle: Bundle(for: self))!
     }
-    
+
 }

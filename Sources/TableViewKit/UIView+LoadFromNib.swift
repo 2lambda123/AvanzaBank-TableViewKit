@@ -8,7 +8,7 @@
 import UIKit
 
 public extension UIView {
-    
+
     /// Load a view from a Nib file.
     ///
     /// - parameter  named: The name of the Nib file.
@@ -19,5 +19,5 @@ public extension UIView {
             bundle: bundle
         ).instantiate(withOwner: nil, options: nil).first as? T
     }
-    
+
 }

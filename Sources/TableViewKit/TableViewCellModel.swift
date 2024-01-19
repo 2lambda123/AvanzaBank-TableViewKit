@@ -21,45 +21,45 @@ public struct TableViewCellModel: Identifiable {
         case swipeToDelete(handler: Handler?)
         case editActions(actions: [UITableViewRowAction])
     }
-    
+
     internal static let StandardHeight: CGFloat = 44.0
-    
+
     /// A string that uniquely identifies this cell within the table view.
     public var identifier: String
-    
+
     /// The identifier for the table view cell to reuse for this model.
     public var cellReuseIdentifier: String
-    
+
     /// The data for this cell.
     public var data: AnyEquatable?
-    
+
     /// A function that registers this cell for reuse.
     public var cellReuseRegistrator: ((UITableView) -> Void)?
 
     /// A function that configures the table view cell with data when it is dequeued.
     public var cellConfigurator: CellConfigurator?
-    
+
     /// Determines if the cell is selectable (and highlightable) or not. Defaults to `true`.
     public var isSelectable: Bool
-    
+
     /// Determines if the cell is selectable (and highlightable) or not during multiselection.
     /// If set to false, won't indent during multiselection either. Defaults to `true`.
     public var isMultiSelectable: Bool
-    
+
     /// A function which is called whenever the cell is selected.
     public var selectionHandler: Handler?
-    
+
     /// A function which is called whenever the cell is deselected.
     public var deselectionHandler: Handler?
-    
+
     /// A function called when the cell is about to be displayed.
     public var willDisplayHandler: CellHandler?
-    
+
     /// A function called after this cell has ended displaying.
     /// This handler might not always get called when switching data sources.
     /// Do not put critical cleanup code here.
     public var didEndDisplayHandler: CellHandler?
-    
+
     /// The edit actions for this cell.
     public var editActions: CellEditActions
 
@@ -68,22 +68,22 @@ public struct TableViewCellModel: Identifiable {
 
     /// The optional paste menu action for this cell.
     public var pasteAction: CellHandler?
-    
+
     /// The preferred row animation this cell should use when animating in & out of the table view.
     public var preferredAnimation: UITableView.RowAnimation
-    
+
     /// Takes a width, returns a height
     fileprivate let estimatedHeightClosure: (CGFloat) -> CGFloat
-    
+
     /// Returns an estimated height for the cell given the width of the table view.
     public func estimatedHeight(forWidth width: CGFloat) -> CGFloat {
         return estimatedHeightClosure(width)
     }
-    
+
     public func hash(into hasher: inout Hasher) {
         hasher.combine(identifier.hashValue)
     }
-    
+
     /// A plain initializer to be used with a standard `UITableViewCell`.
     ///
     /// - Parameters:
@@ -120,7 +120,7 @@ public struct TableViewCellModel: Identifiable {
         copyAction: CellHandler? = nil,
         pasteAction: CellHandler? = nil,
         preferredAnimation: UITableView.RowAnimation = .automatic) {
-        
+
         self.identifier = identifier
         self.cellReuseIdentifier = cellReuseIdentifier
         self.cellReuseRegistrator = cellReuseRegistrator
@@ -138,7 +138,7 @@ public struct TableViewCellModel: Identifiable {
         self.pasteAction = pasteAction
         self.preferredAnimation = preferredAnimation
     }
-    
+
     /// A type-safe initializer to be used with `UITableViewCell` classes of `ReusableViewType`.
     ///
     /// - Parameters:
@@ -173,38 +173,38 @@ public struct TableViewCellModel: Identifiable {
         copyAction: ((UITableView, IndexPath, Cell) -> Void)? = nil,
         pasteAction: ((UITableView, IndexPath, Cell) -> Void)? = nil,
         preferredAnimation: UITableView.RowAnimation = .automatic) where Cell: ReusableViewType {
-        
+
         func handlerForTypedHandler(_ typedHandler: @escaping (UITableView, IndexPath, Cell) -> Void) -> Handler {
             return { tableView, indexPath in
                 guard let cell = tableView.cellForRow(at: indexPath) as? Cell else { fatalError("Wrong cell type in handler") }
                 typedHandler(tableView, indexPath, cell)
             }
         }
-        
+
         func cellHandlerForTypedHandler(_ typedHandler: @escaping (UITableView, IndexPath, Cell) -> Void) -> CellHandler {
             return { tableView, cell, indexPath in
                 guard let cell = cell as? Cell else { return } // Silently fails because of didEndDisplay being VERY unreliable
                 typedHandler(tableView, indexPath, cell)
             }
         }
-        
+
         self.identifier = identifier
         self.data = model
         self.editActions = editActions
         self.preferredAnimation = preferredAnimation
         self.isSelectable = isSelectable
         self.isMultiSelectable = isMultiSelectable
-        
+
         cellReuseIdentifier = Cell.staticReuseIdentifier
         self.cellReuseRegistrator = { Cell.register(viewKind: .cell, inTableView: $0) }
-        
+
         self.cellConfigurator = { tableView, cell in
             guard let cell = cell as? Cell else { fatalError("Wrong cell type for model") }
             cell.setSeparatorStyle(separatorStyle)
             cellConfigurator?(tableView, cell)
             cell.setup(model)
         }
-        
+
         self.estimatedHeightClosure = { width in
             if let estimatedHeight = cellType.estimatedHeight(forWidth: width, model: model) {
                 return estimatedHeight
@@ -214,7 +214,7 @@ public struct TableViewCellModel: Identifiable {
                 return TableViewCellModel.StandardHeight
             }
         }
-        
+
         self.selectionHandler = selectionHandler.flatMap(handlerForTypedHandler)
         self.deselectionHandler = deselectionHandler.flatMap(handlerForTypedHandler)
         self.willDisplayHandler = willDisplayHandler.flatMap(cellHandlerForTypedHandler)

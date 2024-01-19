@@ -11,23 +11,23 @@ import Foundation
 ///
 /// - SeeAlso: `ArrayChange`
 public enum ArrayChangeType: Hashable {
-    
+
     /// An insertion.
     case insert(Int)
-    
+
     /// A deletion.
     case delete(Int)
-    
+
     /// A move from an index to another.
     case move(Int, Int)
-    
+
     /// An update of an object with indexes before and after.
     case update(Int, Int)
 
 }
 
 extension ArrayChangeType: CustomDebugStringConvertible {
-    
+
     /// :nodoc:
     public var debugDescription: String {
         switch self {
@@ -46,13 +46,13 @@ extension ArrayChangeType: CustomDebugStringConvertible {
 
 /// Represents a change in an array of specific type.
 public struct ArrayChange<Item: Identifiable>: Hashable {
-    
+
     /// The item in the array affected by the change.
     public var item: Item
-    
+
     /// The type of the change.
     public var type: ArrayChangeType
-    
+
     /// The designated initializer.
     ///
     /// - Parameters:
@@ -66,7 +66,7 @@ public struct ArrayChange<Item: Identifiable>: Hashable {
 }
 
 extension ArrayChange: CustomDebugStringConvertible {
-    
+
     /// :nodoc:
     public var debugDescription: String {
         return "Id: \(item.identifier), \(type.debugDescription)"
